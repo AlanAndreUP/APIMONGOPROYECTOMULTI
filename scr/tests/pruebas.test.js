@@ -75,7 +75,7 @@ describe('CRUD Tests', () => {
       .delete(`/api/${newItemId}`);
 
     expect(response.statusCode).toBe(200);
-    expect(response.body.message).toBe('Item deleted');
+    expect(response.body.message).toBe('El objeto fue eliminado');
   });
 
   it('Debería devolver 404 al intentar obtener un elemento eliminado', async () => {
