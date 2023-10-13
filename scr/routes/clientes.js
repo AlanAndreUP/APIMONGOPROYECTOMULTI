@@ -45,7 +45,7 @@ module.exports = (client) => {
       if (item) {
         res.json(item);
       } else {
-        res.status(404).json({ error: 'Item not found' });
+        res.status(404).json({ error: 'El objeto no fue encontrado' });
       }
     } catch (err) {
       res.status(500).json({ error: err.message });
@@ -63,7 +63,7 @@ module.exports = (client) => {
       if (result.modifiedCount === 1) {
         res.json(updatedItem);
       } else {
-        res.status(404).json({ error: 'Item not found' });
+        res.status(404).json({ error: 'El objeto no fue encontrado' });
       }
     } catch (err) {
       res.status(500).json({ error: err.message });
@@ -78,9 +78,9 @@ module.exports = (client) => {
       const collection = await getCollection();
       const result = await collection.deleteOne({ _id: new ObjectID(itemId) });
       if (result.deletedCount === 1) {
-        res.json({ message: 'Item deleted' });
+        res.json({ message: 'El objeto se ha eliminado' });
       } else {
-        res.status(404).json({ error: 'Item not found' });
+        res.status(404).json({ error: 'El objeto no fue encontrado' });
       }
     } catch (err) {
       res.status(500).json({ error: err.message });
