@@ -1,34 +1,36 @@
 const express = require('express');
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const mongoose = require('mongoose');
 const app = express();
 const port = process.env.PORT || 3000;
+require('dotenv').config();
 
-const uri = "mongodb+srv://223208:Jaguares34.1@cluster0.swir3km.mongodb.net/?retryWrites=true&w=majority";
-const client = new MongoClient(uri, {
-  serverApi: {
-    version: ServerApiVersion.v1,
-    strict: true,
-    deprecationErrors: true,
-  }
+const uri = process.env.MONGODB_URI;
+mongoose.connect(uri, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
 });
 
-async function run() {
-  try {
-    await client.connect();
-    await client.db("admin").command({ ping: 1 });
-    console.log("Se ha conectado exitosamente a la base de datos de Mongo");
-  } catch (err) {
-    console.error(err + "Error en la conexión con la base de datos");
-  }
-}
+const db = mongoose.connection;
 
-run().catch(console.dir);
+db.on('error', (error) => {
+  console.error('Error en la conexión a la base de datos MongoDB:', error);
+});
+
+db.once('open', () => {
+  console.log('Conexión exitosa a la base de datos MongoDB.');
+});
 
 app.use(express.json());
-const apiRouter = require('./routes/citas')(client);
-app.use('/citas', apiRouter);
-const apiRouterClientes = require('./routes/clientes')(client);
-app.use('/clientes', apiRouterClientes);
+
+const apiRouter = require('./routes/citas'); 
+app.use('/cita', apiRouter);
+
+const apiRouterClientes = require('./routes/paciente'); 
+app.use('/paciente', apiRouterClientes);
+
+
+
 app.listen(port, () => {
   console.log(`Servidor en ejecución en el puerto ${port}`);
 });
+ 
